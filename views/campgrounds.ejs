@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Campgrounds - Vanvaas</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #0f1f1a;
+        --panel: rgba(27, 47, 40, 0.95);
+        --card-bg: #1b2f28;
+        --accent: #3a7d44;
+        --accent-light: #52b788;
+        --accent-orange: #f4a261;
+        --text: #e9f5ee;
+        --muted: #a8c5b3;
+        --border: #2d4a3e;
+        --input-bg: #152520;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, var(--bg-main), #0a1612);
+        min-height: 100vh;
+        color: var(--text);
+      }
+
+      /* Atmosphere */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          radial-gradient(ellipse at 20% 30%, rgba(58, 125, 68, 0.1) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 70%, rgba(244, 162, 97, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      /* Navbar */
+      .navbar-custom {
+        background: var(--panel);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        padding: 15px 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text) !important;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: 0.3s ease;
+      }
+
+      .navbar-brand:hover {
+        color: var(--accent-light) !important;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-link-custom {
+        color: var(--muted);
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: 0.3s ease;
+      }
+
+      .nav-link-custom:hover {
+        color: var(--text);
+        background: rgba(58, 125, 68, 0.2);
+      }
+
+      .nav-link-custom.active {
+        color: var(--text);
+        background: var(--accent);
+      }
+
+      .nav-link-custom.btn-style {
+        background: linear-gradient(135deg, var(--accent-orange), #e8915b);
+        color: var(--bg-main);
+        font-weight: 600;
+      }
+
+      .nav-link-custom.btn-style:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(244, 162, 97, 0.4);
+      }
+
+      .btn-auth {
+        background: transparent;
+        border: 1px solid var(--accent-light);
+        color: var(--accent-light);
+        padding: 8px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-auth:hover {
+        background: var(--accent-light);
+        color: var(--bg-main);
+      }
+
+      .user-welcome {
+        color: var(--accent-light);
+        font-weight: 600;
+        padding: 10px 15px;
+        background: rgba(58, 125, 68, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-logout {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .btn-logout:hover {
+        background: rgba(244, 162, 97, 0.2);
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+      }
+
+      /* Main Content */
+      .page {
+        padding: 60px 20px;
+        max-width: 1400px;
+        margin: auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .page-header h2 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 10px rgba(58, 125, 68, 0.3);
+      }
+
+      .page-header p {
+        font-size: 1.2rem;
+        color: var(--muted);
+      }
+
+      /* Search Section */
+      .search-section {
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .search-box {
+        max-width: 500px;
+        width: 100%;
+        position: relative;
+      }
+
+      .search-box input {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 50px 14px 20px;
+        color: var(--text);
+        width: 100%;
+        transition: 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--accent-light);
+        box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.2);
+      }
+
+      .search-box input::placeholder {
+        color: var(--muted);
+      }
+
+      .search-box i {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent-light);
+        font-size: 1.2rem;
+      }
+
+      .btn-add-new {
+        background: linear-gradient(135deg, var(--accent-orange), #e8915b);
+        border: none;
+        padding: 14px 30px;
+        border-radius: 12px;
+        color: var(--bg-main);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .btn-add-new:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(244, 162, 97, 0.4);
+        color: var(--bg-main);
+      }
+
+      /* Camp Grid */
+      .camp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      /* Camp Card */
+      .camp-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .camp-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(58, 125, 68, 0.3);
+        border-color: var(--accent);
+      }
+
+      .camp-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #1a2d25, #243a32);
+      }
+
+      .camp-card-body {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .camp-card-body h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .camp-card-body p {
+        color: var(--muted);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .camp-card-body p:last-of-type {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--accent-light);
+        margin-top: auto;
+        margin-bottom: 15px;
+      }
+
+      .btn-small {
+        background: transparent;
+        border: 1px solid var(--accent);
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: var(--accent-light);
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s ease;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-small:hover {
+        background: var(--accent);
+        color: var(--bg-main);
+        transform: scale(1.05);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: var(--card-bg);
+        border: 2px dashed var(--border);
+        border-radius: 16px;
+        margin: 40px 0;
+      }
+
+      .empty-state i {
+        font-size: 4rem;
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .empty-state h3 {
+        color: var(--text);
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+      }
+
+      .empty-state p {
+        color: var(--muted);
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+      }
+
+      /* Mobile Menu Toggle */
+      .mobile-menu-toggle {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      /* Results Count */
+      .results-count {
+        text-align: center;
+        color: var(--muted);
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+      }
+
+      .results-count strong {
+        color: var(--accent-light);
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: var(--panel);
+          flex-direction: column;
+          padding: 20px;
+          border-top: 1px solid var(--border);
+        }
+
+        .nav-links.show {
+          display: flex;
+        }
+
+        .mobile-menu-toggle {
+          display: block;
+        }
+
+        .page-header h2 {
+          font-size: 2rem;
+        }
+
+        .camp-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .search-section {
+          flex-direction: column;
+        }
+
+        .search-box {
+          max-width: 100%;
+        }
+
+        .btn-add-new {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar-custom">
+      <div class="container-fluid px-4">
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <a href="/" class="navbar-brand">
+            🌲 Vanvaas
+          </a>
+
+          <button class="mobile-menu-toggle" onclick="toggleMenu()">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <div class="nav-links" id="navLinks">
+            <a href="/" class="nav-link-custom">
+              <i class="bi bi-house-door"></i>
+              Home
+            </a>
+            <a href="/campgrounds" class="nav-link-custom active">
+              <i class="bi bi-pin-map"></i>
+              Campgrounds
+            </a>
+            <a href="/camps/new" class="nav-link-custom btn-style">
+              <i class="bi bi-plus-circle"></i>
+              New Campground
+            </a>
+
+            <div style="width: 20px"></div>
+
+            <% if (user) { %>
+              <span class="user-welcome">
+                <i class="bi bi-person-circle"></i>
+                <%= user %>
+              </span>
+              <a href="/logout" class="btn-auth btn-logout">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+              </a>
+            <% } else { %>
+              <a href="/login" class="btn-auth">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login
+              </a>
+              <a href="/register" class="btn-auth">
+                <i class="bi bi-person-plus"></i>
+                Register
+              </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="page">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h2>🏕 Explore Campgrounds</h2>
+        <p>Discover amazing camping destinations across India</p>
+      </div>
+
+      <!-- Search and Add Section -->
+      <div class="search-section">
+        <div class="search-box">
+          <input 
+            type="text" 
+            placeholder="Search by title, location..." 
+            id="searchInput"
+          />
+          <i class="bi bi-search"></i>
+        </div>
+        <a href="/camps/new" class="btn-add-new">
+          <i class="bi bi-plus-circle"></i>
+          Add New Camp
+        </a>
+      </div>
+
+      <% if (camps.length > 0) { %>
+        <!-- Results Count -->
+        <div class="results-count">
+          Found <strong><%= camps.length %></strong> campground<%= camps.length === 1 ? '' : 's' %>
+        </div>
+      <% } %>
+
+      <!-- Camp Grid -->
+      <div class="camp-grid">
+        <% if(camps.length === 0) { %>
+          <!-- Empty State -->
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="bi bi-tree"></i>
+            <h3>No Campgrounds Yet</h3>
+            <p>Be the first to share an amazing camping spot with the community!</p>
+            <a href="/camps/new" class="btn-add-new">
+              <i class="bi bi-plus-circle"></i>
+              Add First Campground
+            </a>
+          </div>
+        <% } %>
+
+        <% camps.forEach(camp => { %>
+          <div class="camp-card">
+            <img 
+              src="<%= camp.image || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600' %>" 
+              alt="<%= camp.title %>"
+              onerror="this.src='https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600'"
+            />
+            <div class="camp-card-body">
+              <h3>
+                <i class="bi bi-tree-fill" style="color: var(--accent-light); font-size: 1rem;"></i>
+                <%= camp.title %>
+              </h3>
+              <p>
+                <i class="bi bi-geo-alt-fill"></i>
+                <%= camp.location %>
+              </p>
+              <% if (camp.price) { %>
+                <p>₹ <%= camp.price %>/night</p>
+              <% } else { %>
+                <p>Price not set</p>
+              <% } %>
+              <a href="/campgrounds/<%= camp.id %>" class="btn-small">
+                View Details <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <script>
+      // Mobile Menu Toggle
+      function toggleMenu() {
+        const navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('show');
+      }
+
+      // Search Functionality
+      document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.camp-card');
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+          const title = card.querySelector('h3').textContent.toLowerCase();
+          const location = card.querySelector('p').textContent.toLowerCase();
+          
+          if (title.includes(searchTerm) || location.includes(searchTerm)) {
+            card.style.display = 'flex';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Update results count
+        const resultsCount = document.querySelector('.results-count');
+        if (resultsCount) {
+          resultsCount.innerHTML = `Found <strong>${visibleCount}</strong> campground${visibleCount === 1 ? '' : 's'}`;
+        }
+      });
+    </script>
+  </body>
+</html>

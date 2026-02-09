@@ -24,8 +24,8 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { username, password } = req.body;
-  users.push({ username, password });
+  const { username, email, password } = req.body;
+  users.push({ username, email, password });
   currentUser = username;
   res.redirect("/");
 });
@@ -50,18 +50,84 @@ app.post("/login", (req, res) => {
   }
 });
 
-// ADD CAMP (Functionality)
-app.get("/camps/new", (req, res) => {
-  res.render("camps/new");
+// LOGOUT
+app.get("/logout", (req, res) => {
+  currentUser = null;
+  res.redirect("/");
 });
 
+// VIEW ALL CAMPGROUNDS
+app.get("/campgrounds", (req, res) => {
+  res.render("campgrounds", { camps: camps, user: currentUser });
+});
+
+// ADD CAMP - Show Form
+app.get("/camps/new", (req, res) => {
+  res.render("camps/new", { user: currentUser });
+});
+
+// ADD CAMP - Handle Form Submission
 app.post("/camps", (req, res) => {
-  const { title, location } = req.body;
-  camps.push({ title, location });
-  res.redirect("/");
+  const { title, location, description, price, image } = req.body;
+  
+  const newCamp = {
+    id: camps.length + 1,
+    title,
+    location,
+    description,
+    price,
+    image: image || "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600",
+  };
+  
+  camps.push(newCamp);
+  res.redirect("/campgrounds");
+});
+
+// VIEW SINGLE CAMPGROUND
+app.get("/campgrounds/:id", (req, res) => {
+  const camp = camps.find((c) => c.id === parseInt(req.params.id));
+  
+  if (camp) {
+    res.render("camps/show", { camp: camp, user: currentUser });
+  } else {
+    res.redirect("/campgrounds");
+  }
+});
+
+// EDIT CAMPGROUND - Show Form
+app.get("/campgrounds/:id/edit", (req, res) => {
+  const camp = camps.find((c) => c.id === parseInt(req.params.id));
+  
+  if (camp) {
+    res.render("camps/edit", { camp: camp, user: currentUser });
+  } else {
+    res.redirect("/campgrounds");
+  }
+});
+
+// UPDATE CAMPGROUND
+app.post("/campgrounds/:id", (req, res) => {
+  const { title, location, description, price, image } = req.body;
+  const camp = camps.find((c) => c.id === parseInt(req.params.id));
+  
+  if (camp) {
+    camp.title = title;
+    camp.location = location;
+    camp.description = description;
+    camp.price = price;
+    camp.image = image || camp.image;
+  }
+  
+  res.redirect(`/campgrounds/${req.params.id}`);
+});
+
+// DELETE CAMPGROUND
+app.post("/campgrounds/:id/delete", (req, res) => {
+  camps = camps.filter((c) => c.id !== parseInt(req.params.id));
+  res.redirect("/campgrounds");
 });
 
 const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
