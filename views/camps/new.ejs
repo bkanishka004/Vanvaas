@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Camp - Vanvaas</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #0f1f1a;
+        --panel: rgba(27, 47, 40, 0.9);
+        --accent: #3a7d44;
+        --accent-light: #52b788;
+        --text: #e9f5ee;
+        --muted: #a8c5b3;
+        --border: #2d4a3e;
+        --input: #1c302a; /* lighter input */
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, var(--bg-main), #0a1612);
+        min-height: 100vh;
+        color: var(--text);
+        padding: 40px 20px;
+      }
+
+      /* Layout */
+      .form-wrapper {
+        max-width: 850px;
+        margin: auto;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 30px;
+      }
+
+      .page-header h1 {
+        font-weight: 600;
+        font-size: 2.2rem;
+      }
+
+      .page-header p {
+        color: var(--muted);
+        margin-top: 5px;
+      }
+
+      /* Panel */
+      .form-panel {
+        background: var(--panel);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 40px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Labels */
+      .form-label {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      /* Inputs */
+      .form-control {
+        background: var(--input);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: #f5f5f5;
+        caret-color: var(--accent-light);
+        transition: 0.3s ease;
+      }
+
+      .form-control:focus {
+        background: var(--input);
+        border-color: var(--accent-light);
+        box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.2);
+        color: var(--text);
+      }
+
+      .form-control::placeholder {
+        color: #b8d9c9 !important;
+        opacity: 1 !important;
+      }
+
+      /* Price group */
+      .input-group-text {
+        background: var(--input);
+        border: 1px solid var(--border);
+        color: var(--accent-light);
+      }
+
+      /* Primary button */
+      .btn-submit {
+        background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        border: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: #08140f;
+        transition: 0.3s ease;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(82, 183, 136, 0.4);
+      }
+
+      /* Secondary button */
+      .btn-view {
+        background: transparent;
+        border: 1px solid var(--accent-light);
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: var(--accent-light);
+        text-decoration: none;
+        transition: 0.3s ease;
+      }
+
+      .btn-view:hover {
+        background: var(--accent-light);
+        color: #08140f;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(82, 183, 136, 0.3);
+      }
+
+      /* Back link */
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        color: var(--accent-light);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .form-panel {
+          padding: 25px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="form-wrapper">
+      <div class="page-header">
+        <h1>🏕 Add New Campground</h1>
+        <p>Share a new adventure spot with the Vanvaas community</p>
+      </div>
+
+      <div class="form-panel">
+        <form action="/camps" method="POST">
+          <div class="mb-4">
+            <label class="form-label">Camp Title</label>
+            <input
+              type="text"
+              name="title"
+              class="form-control"
+              placeholder="Enter campground title"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Location</label>
+            <input
+              type="text"
+              name="location"
+              class="form-control"
+              placeholder="Where is it located?"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Description</label>
+            <textarea
+              name="description"
+              rows="4"
+              class="form-control"
+              placeholder="Describe the campground..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Campground Price</label>
+            <div class="input-group">
+              <span class="input-group-text">₹</span>
+              <input
+                type="number"
+                name="price"
+                class="form-control"
+                placeholder="1500"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Image URL</label>
+            <input
+              type="text"
+              name="image"
+              class="form-control"
+              placeholder="Paste image link"
+            />
+          </div>
+
+          <div class="mt-4 d-flex gap-3 flex-wrap">
+            <button type="submit" class="btn-submit">Add Campground</button>
+
+            <a href="/campgrounds" class="btn-view"> View Campgrounds </a>
+          </div>
+
+          <a href="/" class="back-link">← Back to Home</a>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
