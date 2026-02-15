@@ -1,32 +1,21 @@
-<%- include("../partials/header") %>
-<%- include("../partials/navbar") %>
-
 <section class="show-section">
-    <div class="show-container">
-
-        <div class="show-image">
-            <img src="<%= camp.image %>" alt="camp image">
-        </div>
-
-        <div class="show-content">
-            <h2><%= camp.title %></h2>
-            <p class="location"><%= camp.location %></p>
-
-            <p class="description">
-                <%= camp.description %>
-            </p>
-
-            <div class="price">
-                ₹ <%= camp.price %> / night
-            </div>
-
-            <div class="show-buttons">
-                <a href="/exploreCampgrounds" class="btn-outline">Back</a>
-                <a href="/camps/<%= camp._id %>/edit" class="btn-primary">Edit</a>
-            </div>
-        </div>
-
+  <div class="show-container">
+    <div class="show-image">
+      <img src="<%= camp.image %>" alt="camp image" />
     </div>
-</section>
 
-<%- include("../partials/footer") %>
+    <div class="show-content">
+      <h2><%= camp.title %></h2>
+      <p class="location"><%= camp.location %></p>
+
+      <p class="description"><%= camp.description %></p>
+
+      <div class="price">₹ <%= camp.price %> / night</div>
+
+      <div class="show-buttons">
+        <a href="/campgrounds" class="btn-outline">Back</a>
+        <a href="/camps/<%= camp._id %>/edit" class="btn-primary">Edit</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,19 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
 
 const app = express();
+
+/* ================= DATABASE ================= */
+
+mongoose
+  .connect("mongodb://127.0.0.1:27017/vanvaasDB")
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+
+/* ================= SETTINGS ================= */
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -9,125 +21,130 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-let users = [];
-let camps = [];
-let currentUser = null;
+/* ================= SESSION ================= */
 
-// HOME PAGE
-app.get("/", (req, res) => {
-  res.render("home", { camps: camps, user: currentUser });
+app.use(
+  session({
+    secret: "vanvaassecret",
+    resave: false,
+    saveUninitialized: false,
+  }),
+);
+
+/* ================= MODELS ================= */
+
+const User = require("./models/User");
+const Camp = require("./models/Camp");
+
+/* ================= GLOBAL USER MIDDLEWARE ================= */
+/* This safely makes user available in ALL EJS files */
+
+app.use(async (req, res, next) => {
+  res.locals.user = null;
+
+  if (req.session.userId) {
+    try {
+      const user = await User.findById(req.session.userId).select("-password");
+      res.locals.user = user;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  next();
 });
 
-// REGISTER
+/* ================= ROUTES ================= */
+
+// Home
+app.get("/", (req, res) => {
+  res.render("home");
+});
+
+/* ================= REGISTER ================= */
+
 app.get("/register", (req, res) => {
   res.render("users/register");
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
-  users.push({ username, email, password });
-  currentUser = username;
-  res.redirect("/");
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+  });
+
+  await newUser.save();
+  res.redirect("/login");
 });
 
-// LOGIN
+/* ================= LOGIN ================= */
+
 app.get("/login", (req, res) => {
   res.render("users/login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const foundUser = users.find(
-    (user) => user.username === username && user.password === password,
-  );
+  const user = await User.findOne({ username });
 
-  if (foundUser) {
-    currentUser = username;
-    res.redirect("/");
-  } else {
-    res.send("Invalid Credentials");
+  if (!user) {
+    return res.send("User not found");
   }
-});
 
-// LOGOUT
-app.get("/logout", (req, res) => {
-  currentUser = null;
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    return res.send("Incorrect password");
+  }
+
+  req.session.userId = user._id;
   res.redirect("/");
 });
 
-// VIEW ALL CAMPGROUNDS
-app.get("/campgrounds", (req, res) => {
-  res.render("campgrounds", { camps: camps, user: currentUser });
+/* ================= LOGOUT ================= */
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 });
 
-// ADD CAMP - Show Form
+/* ================= CAMPS ================= */
+
+// Show Add Camp Page (Protected)
 app.get("/camps/new", (req, res) => {
-  res.render("camps/new", { user: currentUser });
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+  res.render("camps/new");
 });
 
-// ADD CAMP - Handle Form Submission
-app.post("/camps", (req, res) => {
-  const { title, location, description, price, image } = req.body;
-  
-  const newCamp = {
-    id: camps.length + 1,
-    title,
-    location,
-    description,
-    price,
-    image: image || "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600",
-  };
-  
-  camps.push(newCamp);
+// Add Camp
+app.post("/camps", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  const camp = new Camp(req.body);
+  await camp.save();
+
   res.redirect("/campgrounds");
 });
 
-// VIEW SINGLE CAMPGROUND
-app.get("/campgrounds/:id", (req, res) => {
-  const camp = camps.find((c) => c.id === parseInt(req.params.id));
-  
-  if (camp) {
-    res.render("camps/show", { camp: camp, user: currentUser });
-  } else {
-    res.redirect("/campgrounds");
-  }
+// View All Camps
+app.get("/campgrounds", async (req, res) => {
+  const camps = await Camp.find({});
+  res.render("campgrounds", { camps });
 });
 
-// EDIT CAMPGROUND - Show Form
-app.get("/campgrounds/:id/edit", (req, res) => {
-  const camp = camps.find((c) => c.id === parseInt(req.params.id));
-  
-  if (camp) {
-    res.render("camps/edit", { camp: camp, user: currentUser });
-  } else {
-    res.redirect("/campgrounds");
-  }
-});
+/* ================= SERVER ================= */
 
-// UPDATE CAMPGROUND
-app.post("/campgrounds/:id", (req, res) => {
-  const { title, location, description, price, image } = req.body;
-  const camp = camps.find((c) => c.id === parseInt(req.params.id));
-  
-  if (camp) {
-    camp.title = title;
-    camp.location = location;
-    camp.description = description;
-    camp.price = price;
-    camp.image = image || camp.image;
-  }
-  
-  res.redirect(`/campgrounds/${req.params.id}`);
-});
-
-// DELETE CAMPGROUND
-app.post("/campgrounds/:id/delete", (req, res) => {
-  camps = camps.filter((c) => c.id !== parseInt(req.params.id));
-  res.redirect("/campgrounds");
-});
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });

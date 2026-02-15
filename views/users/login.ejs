@@ -235,6 +235,7 @@
             <div class="input-group-custom">
               <i class="bi bi-person"></i>
               <input
+                id="loginUsername"
                 type="text"
                 name="username"
                 class="form-control"
@@ -249,6 +250,7 @@
             <div class="input-group-custom">
               <i class="bi bi-lock"></i>
               <input
+                id="loginPassword"
                 type="password"
                 name="password"
                 class="form-control"
@@ -258,17 +260,7 @@
             </div>
           </div>
 
-          <div class="forgot-password">
-            <a href="#">Forgot password?</a>
-          </div>
-
-          <button type="submit" class="btn-login">Sign In</button>
-
-          <div class="divider">
-            <span>or</span>
-          </div>
-
-          <a href="/" class="btn-home">Back to Home</a>
+          <button id="loginBtn" type="submit" class="btn-login">Sign In</button>
         </form>
 
         <div class="footer-text">
