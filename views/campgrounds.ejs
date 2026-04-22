@@ -317,18 +317,32 @@
 
       <!-- Search and Add Section -->
       <div class="search-section">
-        <div class="search-box">
-          <input 
-            type="text" 
-            placeholder="Search by title, location..." 
-            id="searchInput"
-          />
-          <i class="bi bi-search"></i>
-        </div>
-        <a href="/camps/new" class="btn-add-new">
-          <i class="bi bi-plus-circle"></i>
-          Add New Camp
-        </a>
+       <div class="search-section">
+  <div class="search-box">
+    <input 
+      type="text" 
+      placeholder="Search by title, location..." 
+      id="searchInput"
+    />
+    <i class="bi bi-search"></i>
+  </div>
+
+  <!-- 🔽 NEW SORT DROPDOWN -->
+  <form method="GET" action="/campgrounds">
+    <select name="sort" onchange="this.form.submit()" 
+      style="background: var(--card-bg); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 10px;">
+      
+      <option value="">Sort by</option>
+      <option value="price_asc">Price: Low → High</option>
+      <option value="price_desc">Price: High → Low</option>
+    </select>
+  </form>
+
+  <a href="/camps/new" class="btn-add-new">
+    <i class="bi bi-plus-circle"></i>
+    Add New Camp
+  </a>
+</div>
       </div>
 
       <% if (camps.length > 0) { %>

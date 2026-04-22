@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -53,6 +54,9 @@ app.use(async (req, res, next) => {
 });
 
 /* ================= ROUTES ================= */
+
+const aiRoutes = require("./routes/ai");
+app.use("/ai", aiRoutes);
 
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");

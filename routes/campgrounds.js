@@ -26,7 +26,18 @@ router.post("/camps", async (req, res) => {
 // List campgrounds
 router.get("/campgrounds", async (req, res) => {
   try {
-    const camps = await Camp.find({});
+    const { sort } = req.query;
+
+    let sortOption = {};
+
+    if (sort === "price_asc") {
+      sortOption.price = 1; // Low → High
+    } else if (sort === "price_desc") {
+      sortOption.price = -1; // High → Low
+    }
+
+    const camps = await Camp.find({}).sort(sortOption);
+
     res.render("campgrounds", { camps });
   } catch (err) {
     console.error("Camps fetch error:", err);
