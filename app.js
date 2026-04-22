@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const session = require("express-session");
+const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 
 const app = express();
@@ -22,6 +23,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(methodOverride("_method"));
 
 /* ================= SESSION ================= */
 
@@ -33,9 +35,8 @@ app.use(
   }),
 );
 
-/* ================= LOCALS MIDDLEWARE ================= */
-// Must be registered BEFORE routes so all routes have access to res.locals.user
-
+/* ================= GLOBAL USER MIDDLEWARE ================= */
+/* This safely makes user available in ALL EJS files */
 const User = require("./models/User");
 
 app.use(async (req, res, next) => {
