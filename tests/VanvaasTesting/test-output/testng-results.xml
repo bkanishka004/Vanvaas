@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="5" passed="4" failed="1" skipped="0">
+  <reporter-output>
+    <line>
+      <![CDATA[testAISummary passed: length=35]]>
+    </line>
+    <line>
+      <![CDATA[testAddCamp passed: title=Desert Moon Camp, price=1999]]>
+    </line>
+    <line>
+      <![CDATA[testInvalidRating: rating=7 expected to FAIL]]>
+    </line>
+    <line>
+      <![CDATA[testReview passed: rating=5]]>
+    </line>
+    <line>
+      <![CDATA[testSorting passed: min price=1000]]>
+    </line>
+  </reporter-output>
+  <suite started-at="2026-04-26T05:21:35 IST" name="Default suite" finished-at="2026-04-26T05:21:36 IST" duration-ms="76">
+    <groups>
+    </groups>
+    <test started-at="2026-04-26T05:21:35 IST" name="Default test" finished-at="2026-04-26T05:21:36 IST" duration-ms="76">
+      <class name="tests.VanvaasTest">
+        <test-method signature="testAISummary()[pri:0, instance:tests.VanvaasTest@35cabb2a]" started-at="2026-04-26T05:21:35 IST" name="testAISummary" finished-at="2026-04-26T05:21:35 IST" duration-ms="13" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[testAISummary passed: length=35]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- testAISummary -->
+        <test-method signature="testAddCamp()[pri:0, instance:tests.VanvaasTest@35cabb2a]" started-at="2026-04-26T05:21:35 IST" name="testAddCamp" finished-at="2026-04-26T05:21:35 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[testAddCamp passed: title=Desert Moon Camp, price=1999]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- testAddCamp -->
+        <test-method signature="testInvalidRating()[pri:0, instance:tests.VanvaasTest@35cabb2a]" started-at="2026-04-26T05:21:36 IST" name="testInvalidRating" finished-at="2026-04-26T05:21:36 IST" duration-ms="7" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[Rating should not exceed 5 expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: Rating should not exceed 5 expected [true] but found [false]
+at org.testng.Assert.fail(Assert.java:111)
+at org.testng.Assert.failNotEquals(Assert.java:1590)
+at org.testng.Assert.assertTrue(Assert.java:57)
+at tests.VanvaasTest.testInvalidRating(VanvaasTest.java:51)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:687)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:995)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:741)
+at org.testng.TestRunner.run(TestRunner.java:616)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+            <line>
+              <![CDATA[testInvalidRating: rating=7 expected to FAIL]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- testInvalidRating -->
+        <test-method signature="testReview()[pri:0, instance:tests.VanvaasTest@35cabb2a]" started-at="2026-04-26T05:21:36 IST" name="testReview" finished-at="2026-04-26T05:21:36 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[testReview passed: rating=5]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- testReview -->
+        <test-method signature="testSorting()[pri:0, instance:tests.VanvaasTest@35cabb2a]" started-at="2026-04-26T05:21:36 IST" name="testSorting" finished-at="2026-04-26T05:21:36 IST" duration-ms="3" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[testSorting passed: min price=1000]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- testSorting -->
+      </class> <!-- tests.VanvaasTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
